@@ -1,0 +1,5 @@
+<h2>Edit Meow</h2>
+
+<%= render "form.html", Map.put(assigns, :action, meow_path(@conn, :update, @meow)) %>
+
+<span><%= link "Back", to: meow_path(@conn, :index) %></span>

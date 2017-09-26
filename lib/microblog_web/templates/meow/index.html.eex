@@ -1,0 +1,30 @@
+<h2>Listing Meow</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>Content</th>
+      <th>Posted dttm</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for meow <- @meow do %>
+    <tr>
+      <td><%= meow.user_id %></td>
+      <td><%= meow.content %></td>
+      <td><%= meow.posted_dttm %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: meow_path(@conn, :show, meow), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: meow_path(@conn, :edit, meow), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: meow_path(@conn, :delete, meow), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Meow", to: meow_path(@conn, :new) %></span>

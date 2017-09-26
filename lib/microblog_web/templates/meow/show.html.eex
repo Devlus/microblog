@@ -1,0 +1,23 @@
+<h2>Show Meow</h2>
+
+<ul>
+
+  <li>
+    <strong>User:</strong>
+    <%= @meow.user_id %>
+  </li>
+
+  <li>
+    <strong>Content:</strong>
+    <%= @meow.content %>
+  </li>
+
+  <li>
+    <strong>Posted dttm:</strong>
+    <%= @meow.posted_dttm %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: meow_path(@conn, :edit, @meow) %></span>
+<span><%= link "Back", to: meow_path(@conn, :index) %></span>

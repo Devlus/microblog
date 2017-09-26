@@ -1,20 +1,11 @@
 # Microblog
 
-To start your Phoenix server:
+My Message resource can be found at microblog.devonherlitz.solutions/meow
 
-  * Install dependencies with `mix deps.get`
-  * Create and migrate your database with `mix ecto.create && mix ecto.migrate`
-  * Install Node.js dependencies with `cd assets && npm install`
-  * Start Phoenix endpoint with `mix phx.server`
+In addition to the lecture notes, I modified the sample code provided in:
+https://hexdocs.pm/distillery/running-migrations.html#migration-module
+which was recommended in the lecture notes.
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+## REPO
+https://github.com/Devlus/microblog
 
-Ready to run in production? Please [check our deployment guides](http://www.phoenixframework.org/docs/deployment).
-
-## Learn more
-
-  * Official website: http://www.phoenixframework.org/
-  * Guides: http://phoenixframework.org/docs/overview
-  * Docs: https://hexdocs.pm/phoenix
-  * Mailing list: http://groups.google.com/group/phoenix-talk
-  * Source: https://github.com/phoenixframework/phoenix

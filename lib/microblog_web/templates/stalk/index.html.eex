@@ -1,0 +1,24 @@
+<h2>Listing Stalk</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for stalk <- @stalk do %>
+    <tr>
+
+      <td class="text-right">
+        <span><%= link "Show", to: stalk_path(@conn, :show, stalk), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: stalk_path(@conn, :edit, stalk), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: stalk_path(@conn, :delete, stalk), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Stalk", to: stalk_path(@conn, :new) %></span>

@@ -1,0 +1,8 @@
+<h2>Show Stalk</h2>
+
+<ul>
+
+</ul>
+
+<span><%= link "Edit", to: stalk_path(@conn, :edit, @stalk) %></span>
+<span><%= link "Back", to: stalk_path(@conn, :index) %></span>

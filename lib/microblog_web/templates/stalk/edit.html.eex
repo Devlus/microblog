@@ -1,0 +1,5 @@
+<h2>Edit Stalk</h2>
+
+<%= render "form.html", Map.put(assigns, :action, stalk_path(@conn, :update, @stalk)) %>
+
+<span><%= link "Back", to: stalk_path(@conn, :index) %></span>

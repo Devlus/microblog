@@ -18,6 +18,9 @@ defmodule MicroblogWeb.Router do
 
     get "/", PageController, :index
     resources "/meow", MeowController
+    resources "/meow_content", MeowContentController
+    resources "/stalk", StalkController
+    resources "/user", UserController
   end
 
   # Other scopes may use custom stacks.

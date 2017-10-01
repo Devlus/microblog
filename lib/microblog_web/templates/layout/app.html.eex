@@ -13,17 +13,45 @@
 
   <body>
     <div class="container">
-      <header class="header">
-        <nav role="navigation">
-          <ul class="nav nav-pills pull-right">
-            <li><a href="http://www.phoenixframework.org/docs">Get Started</a></li>
-          </ul>
+      <header class="header has-top-bar">
+          <nav class="nav navbar navbar-dark bg-info navbar-expand-md fixed-top">
+            <a class="navbar-brand" href="#"><i class="fa fa-paw" aria-hidden="true"></i></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar">
+                    <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="main-navbar">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a href="#" class="nav-link">Stalkers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link"><i class="fa fa-globe" aria-hidden="true"></i> Explore</a>
+                    </li>
+                    <li class="nav-item d-block d-md-none">
+                        <form class="form-inline">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Username">
+                                <span class="input-group-addon btn-primary"><i class="fa fa-user" aria-hidden="true"></i></span>
+                            </div>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+            <form class="form-inline d-none d-md-block">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Username">
+                    <span class="input-group-addon btn-primary"><i class="fa fa-user" aria-hidden="true"></i></span>
+                </div>
+            </form>
         </nav>
-        <span class="logo"></span>
       </header>
 
-      <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
-      <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+      <%= if get_flash(@conn, :info) do %>
+        <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
+      <% end %>
+      <%= if get_flash(@conn, :error) do %>
+        <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+      <% end %>
 
       <main role="main">
         <%= render @view_module, @view_template, assigns %>

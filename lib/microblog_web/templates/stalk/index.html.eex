@@ -14,6 +14,10 @@
       <td><%=  stalk.target.first_name %> <%=  stalk.target.last_name %></td>
       <td>@<%=  stalk.target.handle %></td>
       <td>Stalked since: <%=  stalk.inserted_at %></td>
+      <td>
+      <%= link "Unstalk", to: stalk_path(@conn, :delete, stalk), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-sm" %>
+
+      </td>
     </tr>
 <% end %>
   </tbody>

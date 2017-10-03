@@ -50,19 +50,19 @@ defmodule MicroblogWeb.StalkController do
     end
   end
 
-  def unstalk(conn,%{"actor_id"=>actor, "target_id"=>target}) do
-     {:ok,_} = Microblog.unstalk(actor, target)
-      conn
-        |> put_flash(:info, "Unstocked User")
-        |> redirect(to: user_path(conn, :show, actor))
-  end
+  # def delete(conn,%{"actor_id"=>actor, "target_id"=>target}) do
+  #    {:ok,_} = Microblog.unstalk(actor, target)
+  #     conn
+  #       |> put_flash(:info, "Unstalked User")
+  #       |> redirect(to: user_path(conn, :show, actor))
+  # end
 
   def delete(conn, %{"id" => id}) do
     stalk = MicroBlog.get_stalk!(id)
     {:ok, _stalk} = MicroBlog.delete_stalk(stalk)
 
     conn
-    |> put_flash(:info, "Stalk deleted successfully.")
+    |> put_flash(:info, "Unstalked User")
     |> redirect(to: stalk_path(conn, :index))
   end
 end

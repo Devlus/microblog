@@ -20,11 +20,13 @@ After login in the user is taken to their profile. They can enter new posts in t
 A User can browse other user's profiles by clicking "Explore" in the nav bar. On another user's page, you can click stalk in order to follow their meows.
 
 Meows from people you are stalking will be displayed now on your own profile.
-You can also browse a list of everyone you are stalking by clicking the "stalking" in the nav bar.
+You can also browse a list of everyone you are stalking by clicking the "stalking" in the nav bar. You can also unfollow people from here.
 
 
 When you are done, you can log out by clicking the big red log out button.
 
+
+The Stalk button doesn't get hidden after click, so you can follow someone multiple times, this will be fixed in the future.
 
 
 

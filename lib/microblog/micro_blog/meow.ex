@@ -5,9 +5,10 @@ defmodule Microblog.MicroBlog.Meow do
 
 
   schema "meow" do
+    belongs_to(:author, Microblog.MicroBlog.User)
     field :content, :string
-    field :posted_dttm, :utc_datetime
-    field :user_id, :integer
+    # field :content_id, :id
+    # field :author_id, :id
 
     timestamps()
   end
@@ -15,7 +16,7 @@ defmodule Microblog.MicroBlog.Meow do
   @doc false
   def changeset(%Meow{} = meow, attrs) do
     meow
-    |> cast(attrs, [:user_id, :content, :posted_dttm])
-    |> validate_required([:user_id, :content, :posted_dttm])
+    |> cast(attrs, [:author_id, :content])
+    |> validate_required([:author_id, :content])
   end
 end

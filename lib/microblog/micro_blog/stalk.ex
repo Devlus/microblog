@@ -5,8 +5,8 @@ defmodule Microblog.MicroBlog.Stalk do
 
 
   schema "stalk" do
-    field :actor, :id
-    field :target, :id
+    belongs_to(:actor, Microblog.MicroBlog.User)
+    belongs_to(:target, Microblog.MicroBlog.User)
 
     timestamps()
   end
@@ -14,7 +14,7 @@ defmodule Microblog.MicroBlog.Stalk do
   @doc false
   def changeset(%Stalk{} = stalk, attrs) do
     stalk
-    |> cast(attrs, [])
-    |> validate_required([])
+    |> cast(attrs, [:actor_id, :target_id])
+    |> validate_required([:actor_id, :target_id])
   end
 end

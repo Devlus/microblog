@@ -37,6 +37,60 @@ defmodule Microblog.MicroBlog do
   """
   def get_meow!(id), do: Repo.get!(Meow, id)
 
+  def get_meows_to_display_for_user(user_id) do
+    # select * from Public.meow as m
+    # where author_id = 1
+    # union all
+    # select * from public.meow as m
+    # where author_id =  ANY(
+    # select target_id from stalk
+    # where actor_id = 1)
+
+    stalking = Microblog.MicroBlog.Stalk
+        |> where([s], s.actor_id == ^user_id)
+        |> select([s], s.target_id)
+    
+    l = Repo.all(stalking)
+    l = List.flatten(l,[user_id])
+    meows = Meow 
+            |> where([m], m.author_id in ^l)
+            |> order_by([m],[desc: m.inserted_at])
+            |> preload([:author])
+            |> Repo.all
+    
+
+    # query1 = from m in "meow",
+    #     where: m.author_id = ^user_id,
+    #     select: %{:content => c.content,
+    #     :author => %{:handle => u.handle,
+    #                :first_name => u.first_name,
+    #                :last_name => u.last_name}}
+    # query2 =                   
+    #     from m in "meow"
+    #     where: author_id = any(from s in "stalk",
+    #     where: actor_id = ^user_id,
+    #     select: {m.target_id}),
+    #     order_by: [desc: m.inserted_at],
+    #     select: %{:content => c.content,
+    #      :author => %{:handle => u.handle,
+    #                 :first_name => u.first_name,
+    #                 :last_name => u.last_name}}
+
+
+
+#     query = from m in "meow",
+#     join: c in "meow_content", where: c.id == m.content_id,
+#     join: u in "user", where: u.id == m.author_id,
+#     join: s in "stalk", where: s.actor_id == u.id
+#     where: m.author_id == ^user_id,
+#     order_by: [desc: m.inserted_at],
+#     select: %{:content => c.content,
+#      :author => %{:handle => u.handle,
+#                 :first_name => u.first_name,
+#                 :last_name => u.last_name}}
+    # Repo.all(query0)
+  end
+
   @doc """
   Creates a meow.
 
@@ -49,6 +103,11 @@ defmodule Microblog.MicroBlog do
       {:error, %Ecto.Changeset{}}
 
   """
+#   def create_meow(attrs \\ %{}) do
+#     %Meow{}
+#     |> Meow.changeset(attrs)
+#     |> Repo.insert()
+#   end
   def create_meow(attrs \\ %{}) do
     %Meow{}
     |> Meow.changeset(attrs)
@@ -134,6 +193,15 @@ defmodule Microblog.MicroBlog do
   def get_user!(id), do: Repo.get!(User, id)
 
   @doc """
+  Taken from Nat's Lecture Notes
+  http://www.ccs.neu.edu/home/ntuck/courses/2017/09/cs4550/notes/06-finish-cart/notes.html
+ """
+  def get_user_by_email(email) do
+    Repo.get_by(User, email: email)
+  end
+
+
+  @doc """
   Creates a user.
 
   ## Examples
@@ -198,116 +266,26 @@ defmodule Microblog.MicroBlog do
     User.changeset(user, %{})
   end
 
-  alias Microblog.MicroBlog.MeowContent
-
-  @doc """
-  Returns the list of meow_content.
-
-  ## Examples
-
-      iex> list_meow_content()
-      [%MeowContent{}, ...]
-
-  """
-  def list_meow_content do
-    Repo.all(MeowContent)
-  end
-
-  @doc """
-  Gets a single meow_content.
-
-  Raises `Ecto.NoResultsError` if the Meow content does not exist.
-
-  ## Examples
-
-      iex> get_meow_content!(123)
-      %MeowContent{}
-
-      iex> get_meow_content!(456)
-      ** (Ecto.NoResultsError)
-
-  """
-  def get_meow_content!(id), do: Repo.get!(MeowContent, id)
-
-  @doc """
-  Creates a meow_content.
-
-  ## Examples
-
-      iex> create_meow_content(%{field: value})
-      {:ok, %MeowContent{}}
-
-      iex> create_meow_content(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def create_meow_content(attrs \\ %{}) do
-    %MeowContent{}
-    |> MeowContent.changeset(attrs)
-    |> Repo.insert()
-  end
-
-  @doc """
-  Updates a meow_content.
-
-  ## Examples
-
-      iex> update_meow_content(meow_content, %{field: new_value})
-      {:ok, %MeowContent{}}
-
-      iex> update_meow_content(meow_content, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def update_meow_content(%MeowContent{} = meow_content, attrs) do
-    meow_content
-    |> MeowContent.changeset(attrs)
-    |> Repo.update()
-  end
-
-  @doc """
-  Deletes a MeowContent.
-
-  ## Examples
-
-      iex> delete_meow_content(meow_content)
-      {:ok, %MeowContent{}}
-
-      iex> delete_meow_content(meow_content)
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def delete_meow_content(%MeowContent{} = meow_content) do
-    Repo.delete(meow_content)
-  end
-
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking meow_content changes.
-
-  ## Examples
-
-      iex> change_meow_content(meow_content)
-      %Ecto.Changeset{source: %MeowContent{}}
-
-  """
-  def change_meow_content(%MeowContent{} = meow_content) do
-    MeowContent.changeset(meow_content, %{})
-  end
-
   alias Microblog.MicroBlog.Stalk
 
-  @doc """
-  Returns the list of stalk.
 
-  ## Examples
-
-      iex> list_stalk()
-      [%Stalk{}, ...]
-
-  """
-  def list_stalk do
-    Repo.all(Stalk)
+  def list_stalks_by_actor(actor) do
+    # Stalk 
+    # |> where([s],s.actor_id == ^actor)
+    # # |> preload([:target])
+    # |> Repo.all
+    from(s in Stalk, where: s.actor_id == ^actor)
+    |> preload([:target])
+    |> Repo.all
   end
+
+  def unstalk(actor, target)do
+    stalk = Stalk
+            |> where([s],s.actor_id == ^actor and s.target_id == ^target)
+    stalk = Repo.one(stalk)
+    delete_stalk(stalk)
+  end
+
 
   @doc """
   Gets a single stalk.

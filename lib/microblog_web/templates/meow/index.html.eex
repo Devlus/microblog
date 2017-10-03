@@ -13,9 +13,8 @@
   <tbody>
 <%= for meow <- @meow do %>
     <tr>
-      <td><%= meow.user_id %></td>
-      <td><%= meow.content %></td>
-      <td><%= meow.posted_dttm %></td>
+      <td><%= meow.author_id %></td>
+      <td><%= meow.content_id %></td>
 
       <td class="text-right">
         <span><%= link "Show", to: meow_path(@conn, :show, meow), class: "btn btn-default btn-xs" %></span>

@@ -5,8 +5,9 @@ defmodule MicroblogWeb.StalkController do
   alias Microblog.MicroBlog.Stalk
 
   def index(conn, _params) do
-    stalk = MicroBlog.list_stalk()
-    render(conn, "index.html", stalk: stalk)
+    user_id = get_session(conn, :user_id)
+    stalk = Microblog.MicroBlog.list_stalks_by_actor(user_id)
+    render(conn, "index.html", stalks: stalk)
   end
 
   def new(conn, _params) do
@@ -47,6 +48,13 @@ defmodule MicroblogWeb.StalkController do
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", stalk: stalk, changeset: changeset)
     end
+  end
+
+  def unstalk(conn,%{"actor_id"=>actor, "target_id"=>target}) do
+     {:ok,_} = Microblog.unstalk(actor, target)
+      conn
+        |> put_flash(:info, "Unstocked User")
+        |> redirect(to: user_path(conn, :show, actor))
   end
 
   def delete(conn, %{"id" => id}) do

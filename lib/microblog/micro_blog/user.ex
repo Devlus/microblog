@@ -9,7 +9,7 @@ defmodule Microblog.MicroBlog.User do
     field :first_name, :string
     field :handle, :string
     field :last_name, :string
-
+    has_many(:meows, Microblog.MicroBlog.Meow)
     timestamps()
   end
 

@@ -9,7 +9,7 @@ defmodule Microblog.Repo.Migrations.CreateStalk do
       timestamps()
     end
 
-    create index(:stalk, [:actor])
-    create index(:stalk, [:target])
+    create index(:stalk, [:actor_id])
+    create index(:stalk, [:target_id])
   end
 end

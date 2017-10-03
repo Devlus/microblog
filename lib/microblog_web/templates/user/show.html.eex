@@ -1,28 +1,61 @@
-<h2>Show User</h2>
-
-<ul>
-
-  <li>
-    <strong>Email:</strong>
-    <%= @user.email %>
-  </li>
-
-  <li>
-    <strong>Handle:</strong>
-    <%= @user.handle %>
-  </li>
-
-  <li>
-    <strong>First name:</strong>
-    <%= @user.first_name %>
-  </li>
-
-  <li>
-    <strong>Last name:</strong>
-    <%= @user.last_name %>
-  </li>
-
-</ul>
-
-<span><%= link "Edit", to: user_path(@conn, :edit, @user) %></span>
-<span><%= link "Back", to: user_path(@conn, :index) %></span>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-4">
+            <div class="row mb-3">
+                <div class="col-md-6"><i style="font-size: 7rem" class="fa fa-user" aria-hidden="true"></i></div>
+                <div class="col-md-6 row">
+                    <span class="col-md-12"><%= @user.first_name %> <%= @user.last_name %></span>
+                    <span class="col-md-12">@<%= @user.handle %></span>
+                    <%# <span class="d-none d-md-block col-md-12">Last Meow: 20min ago</span> %>
+                    <%= if( @current_user != nil && @current_user.id != @user.id )do %>
+                        <%= form_for @conn, stalk_path(@conn, :create),[as: "stalk"], fn f -> %>
+                            <%= hidden_input f, :actor_id, value: @current_user.id %>
+                            <%= hidden_input f, :target_id, value: @user.id %>
+                            <%= submit "Follow", class: "btn btn-info" %>
+                        <% end %>
+                    <% end %>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="col-12">
+            <%= if( @current_user != nil && @current_user.id == @user.id ) do %>
+                <div class="card mb-4 bg-light">
+                    <div class="card-body">
+                        <%= form_for @conn, meow_path(@conn, :create),[as: "meow_vm"], fn f -> %>
+                            <div class="input-group w-100">
+                                <button class="btn btn-success input-group-addon"><i class="fa fa-edit" aria-hidden="true"></i></button>
+                                <%= textarea f, :content, class: "form-control", placeholder: "Post", rows: 5 %>
+                                <%= submit class: "btn btn-primary input-group-addon" do %>
+                                    <i class="fa fa-send-o" aria-hidden="true"></i>
+                                </div>
+                                <% end %>
+                                <%= hidden_input f, :author_id, value: @current_user.id%>
+                        <% end %>
+                    </div>
+            <% end %>
+                </div>
+                
+                <%= for post <- @posts do %>
+                    <div class="card mb-2">
+                            <div class="card-body">
+                                <div class="card-title">
+                                    <span class="col-12 col-md-auto user-name"><%= post.author.first_name%> <%= post.author.last_name%></span>
+                                    <span class="col-12 col-md-auto user-handle">@<%= post.author.handle%> </span>
+                                </div>
+                                <div class="card-text">
+                                    <%= post.content %>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <div class="input-group w-100">
+                                    <input type="text" class="form-control" placeholder="Reply...">
+                                    <span class="btn btn-primary input-group-addon"><i class="fa fa-send-o" aria-hidden="true"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                <% end %>
+            </div>
+        </div>
+    </div>
+</div>

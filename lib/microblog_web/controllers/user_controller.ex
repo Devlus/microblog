@@ -26,8 +26,11 @@ defmodule MicroblogWeb.UserController do
   end
 
   def show(conn, %{"id" => id}) do
+    int_id = String.to_integer(id)
+    posts = Microblog.MicroBlog.get_meows_to_display_for_user(int_id)
+    # posts = MicroBlog.get_meows_for_user(int_id)
     user = MicroBlog.get_user!(id)
-    render(conn, "show.html", user: user)
+    render(conn, "show.html", user: user, posts: posts)
   end
 
   def edit(conn, %{"id" => id}) do

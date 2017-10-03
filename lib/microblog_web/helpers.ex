@@ -6,7 +6,7 @@ defmodule MicroblogWeb.Helpers do
         IO.puts to_string(temp)
         IO.puts to_string(view)
 
-       if(String.contains?(to_string(view) ,module)) do
+       if(String.contains?(to_string(view) ,module) && String.contains?(to_string(temp) ,location)) do
            "active"
        else
             ""

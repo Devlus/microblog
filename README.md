@@ -28,6 +28,7 @@ When you are done, you can log out by clicking the big red log out button.
 
 The Stalk button doesn't get hidden after click, so you can follow someone multiple times, this will be fixed in the future.
 
+Server has been restarted and continues to show site without intervention.
 
 
 

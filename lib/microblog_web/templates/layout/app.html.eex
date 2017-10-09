@@ -12,18 +12,85 @@
   </head>
 
   <body>
+    
     <div class="container">
-      <header class="header">
-        <nav role="navigation">
-          <ul class="nav nav-pills pull-right">
-            <li><a href="http://www.phoenixframework.org/docs">Get Started</a></li>
-          </ul>
+      <header class="header has-top-bar">
+          <nav class="nav navbar navbar-dark bg-info navbar-expand-md fixed-top">
+            <%= if @current_user do %>
+                <%= link to: user_path(@conn, :show, @current_user.id), class: "navbar-brand" do %>
+                    <i class="fa fa-paw" aria-hidden="true"></i>
+                <% end %>
+            <% else %>
+                <%= link to: user_path(@conn, :index), class: "navbar-brand" do %>
+                    <i class="fa fa-paw" aria-hidden="true"></i>
+                <% end %>
+            <% end %>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar">
+                    <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse not-full-basis" id="main-navbar">
+                <ul class="navbar-nav mr-auto text-center">
+                    <%= if @current_user do %>
+                        <li class="nav-item">
+                            <%# From Nat's Notes, see Helper.ex for details %>
+                            <% active = isActive(@view_module,@view_template, "Stalk", "index") %>
+                            <%= link "Stalking", to: stalk_path(@conn, :index), class: "nav-link #{active}" %>
+                        </li>
+                    <% end %>
+                    <li class="nav-item">
+                        <%# From Nat's Notes, see Helper.ex for details %>
+                        <% active = isActive(@view_module,@view_template, "User", "index") %>
+                        <%= link to: user_path(@conn, :index), class: "nav-link #{active}" do %>
+                            <i class="fa fa-globe" aria-hidden="true"></i> Explore
+                        <% end %>
+                    </li>
+                    <li class="nav-item">
+                        <span class="d-block d-md-none">
+                            <%= link("logout", to: session_path(@conn, :logout), class: "nav-link font-weight-bold", method: :delete) %>
+                        </span>
+                    </li>
+                    <li class="nav-item d-block d-md-none w-100">
+                        <form class="form-inline">
+                            <div class="input-group w-100">
+                                <input type="text" class="form-control" placeholder="Username">
+                                <span class="input-group-addon btn-primary"><i class="fa fa-user" aria-hidden="true"></i></span>
+                            </div>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+            
+            <form class="form-inline d-none d-md-flex mr-auto ml-auto">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Username">
+                    <span class="input-group-addon btn-primary"><i class="fa fa-user" aria-hidden="true"></i></span>
+                </div>
+            </form>
+
+            <%= if @current_user do %>
+                <span class="text-light d-none d-md-flex ml-2">
+                    <%# <%= @current_user.email %>
+                    <%= link("logout", to: session_path(@conn, :logout), class: "btn btn-danger", method: :delete) %>
+                </span>
+                <% else %>
+                <%= form_for @conn, session_path(@conn, :login), [as: "user", class: "form-inline p-2"], fn f -> %>
+                    <div class="input-group">
+                        <%= text_input f, :email,  placeholder: "email", class: "form-control" %>
+                        <%= submit "Log in", class: "input-group-addon btn-primary" %>
+                    </div>
+                <% end %>
+            <% end %>
+
         </nav>
-        <span class="logo"></span>
       </header>
 
-      <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
-      <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+      <%= if get_flash(@conn, :info) do %>
+        <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
+      <% end %>
+      <%= if get_flash(@conn, :error) do %>
+        <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+      <% end %>
 
       <main role="main">
         <%= render @view_module, @view_template, assigns %>

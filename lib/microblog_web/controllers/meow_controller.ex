@@ -14,12 +14,13 @@ defmodule MicroblogWeb.MeowController do
     render(conn, "new.html", changeset: changeset)
   end
 
-  def create(conn, %{"meow" => meow_params}) do
+  def create(conn, %{"meow_vm" => meow_params}) do
+    # IO.puts meow_params
     case MicroBlog.create_meow(meow_params) do
       {:ok, meow} ->
         conn
         |> put_flash(:info, "Meow created successfully.")
-        |> redirect(to: meow_path(conn, :show, meow))
+        |> redirect(to: user_path(conn, :show, meow_params["author_id"]))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end

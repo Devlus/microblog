@@ -1,0 +1,17 @@
+server {
+	listen 80;
+	listen [::]:80;
+
+	server_name microblog.devonherlitz.solutions;
+
+	location / {
+        # Send all requests on to the Phoenix server.
+			proxy_pass http://localhost:8080;
+		}
+	location ~* ^.+\.(css|cur|gif|gz|ico|jpg|jpeg|js|png|svg|woff|woff2)$ {
+		root /home/microblog/microblog/lib/microblog-0.0.2/priv/static/;
+			etag off;
+			expires max;
+			add_header Cache-Control public;
+		}
+	}

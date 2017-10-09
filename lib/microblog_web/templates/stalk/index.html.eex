@@ -1,0 +1,24 @@
+<h2>Listing Stalk</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Handle</th>
+      <th>Stalked At</th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for stalk <- @stalks do %>
+    <tr>
+      <td><%=  stalk.target.first_name %> <%=  stalk.target.last_name %></td>
+      <td>@<%=  stalk.target.handle %></td>
+      <td>Stalked since: <%=  stalk.inserted_at %></td>
+      <td>
+      <%= link "Unstalk", to: stalk_path(@conn, :delete, stalk), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-sm" %>
+
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>

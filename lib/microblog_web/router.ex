@@ -1,12 +1,13 @@
 defmodule MicroblogWeb.Router do
   use MicroblogWeb, :router
-
+  import MicroblogWeb.Plugs
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug :fetch_user
   end
 
   pipeline :api do
@@ -16,8 +17,13 @@ defmodule MicroblogWeb.Router do
   scope "/", MicroblogWeb do
     pipe_through :browser # Use the default browser stack
 
-    get "/", PageController, :index
+    get "/", UserController, :index
     resources "/meow", MeowController
+    resources "/meow_content", MeowContentController
+    resources "/stalk", StalkController
+    resources "/user", UserController
+    post "/sessions", SessionController, :login
+    delete "/sessions", SessionController, :logout
   end
 
   # Other scopes may use custom stacks.

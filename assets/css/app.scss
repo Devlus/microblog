@@ -1,0 +1,16 @@
+/* This file is for your main application css. */
+@import 'bootstrap';
+
+//Setup for Font Awesome from StackOverflow
+//https://stackoverflow.com/a/30053706
+// $fa-font-path:"../node_modules/font-awesome/fonts";
+$fa-font-path:"../../fonts";
+@import "../node_modules/font-awesome/scss/font-awesome";
+
+.has-top-bar {
+    padding-top: 4.5em;
+}
+// .not-full-basis{
+//     flex-basis: unset;
+//     align-items: center;
+// }

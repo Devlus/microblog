@@ -38,7 +38,7 @@ $(function () {
             if (likers[postId]) {
                 debugger;
                 likers[postId].count = postLikers.count;
-                while(likers[postId].length){
+                while (likers[postId].length) {
                     likers[postId].pop();
                 }
                 likers[postId].push(...data.data)
@@ -58,6 +58,9 @@ $(function () {
     likes.click(function () {
         const postId = $(this).attr("data-post");
         const userId = $(this).attr("data-user");
+        if (!userId) {
+            return;
+        }
         const csrf = $(this).attr("data-csrf");
         $.ajax({
             url: "/api/like",

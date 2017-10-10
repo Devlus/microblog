@@ -47,7 +47,9 @@
                                     <span class="d-flex">
                                     <%# csrf token trick from:  https://stackoverflow.com/a/40605374 %>
                                         <span class="clickable like" data-post="<%=post.id%>"
+                                             <%= if( @current_user != nil )do %>
                                              data-user="<%=@current_user.id%>"
+                                             <%end%>
                                              data-csrf="<%= raw Plug.CSRFProtection.get_csrf_token() %>">
                                             {likers.count} <i class="fa fa-paw" aria-hidden="true"></i>
                                             <div class="d-none d-md-block">

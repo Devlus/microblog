@@ -19,3 +19,55 @@ import "phoenix_html"
 // paths "./socket" or full ones "web/static/js/socket".
 
 // import socket from "./socket"
+
+rivets.formatters.log = function (model) {
+    console.log(model);
+};
+
+// let $ = require("jquery");
+$(function () {
+    let likers = {};
+    const likes = $('.like');
+    if (!likes.length) {
+        return;
+    }
+    function updateLike(postId, el) {
+        $.getJSON("/api/like/" + postId, (data) => {
+            var postLikers = data.data;
+            postLikers.count = postLikers.length;
+            if (likers[postId]) {
+                debugger;
+                likers[postId].count = postLikers.count;
+                while(likers[postId].length){
+                    likers[postId].pop();
+                }
+                likers[postId].push(...data.data)
+                console.log(likers[postId])
+            } else {
+                likers[postId] = postLikers;
+                rivets.bind(el, { likers: postLikers });
+            }
+        });
+    }
+    function updateLikes() {
+        likes.each(function () {
+            const postId = $(this).attr("data-post")
+            updateLike(postId, $(this));
+        });
+    }
+    likes.click(function () {
+        const postId = $(this).attr("data-post");
+        const userId = $(this).attr("data-user");
+        const csrf = $(this).attr("data-csrf");
+        $.ajax({
+            url: "/api/like",
+            type: "POST",
+            dataType: "json",
+            headers: { "X-CSRF-Token": csrf },
+            data: {
+                like: { post_id: postId, actor_id: userId }
+            }, success: () => updateLike(postId, $(this))
+        });
+    });
+    updateLikes();
+})

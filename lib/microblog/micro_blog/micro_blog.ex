@@ -38,13 +38,6 @@ defmodule Microblog.MicroBlog do
   def get_meow!(id), do: Repo.get!(Meow, id)
 
   def get_meows_to_display_for_user(user_id) do
-    # select * from Public.meow as m
-    # where author_id = 1
-    # union all
-    # select * from public.meow as m
-    # where author_id =  ANY(
-    # select target_id from stalk
-    # where actor_id = 1)
 
     stalking = Microblog.MicroBlog.Stalk
         |> where([s], s.actor_id == ^user_id)
@@ -57,38 +50,6 @@ defmodule Microblog.MicroBlog do
             |> order_by([m],[desc: m.inserted_at])
             |> preload([:author])
             |> Repo.all
-    
-
-    # query1 = from m in "meow",
-    #     where: m.author_id = ^user_id,
-    #     select: %{:content => c.content,
-    #     :author => %{:handle => u.handle,
-    #                :first_name => u.first_name,
-    #                :last_name => u.last_name}}
-    # query2 =                   
-    #     from m in "meow"
-    #     where: author_id = any(from s in "stalk",
-    #     where: actor_id = ^user_id,
-    #     select: {m.target_id}),
-    #     order_by: [desc: m.inserted_at],
-    #     select: %{:content => c.content,
-    #      :author => %{:handle => u.handle,
-    #                 :first_name => u.first_name,
-    #                 :last_name => u.last_name}}
-
-
-
-#     query = from m in "meow",
-#     join: c in "meow_content", where: c.id == m.content_id,
-#     join: u in "user", where: u.id == m.author_id,
-#     join: s in "stalk", where: s.actor_id == u.id
-#     where: m.author_id == ^user_id,
-#     order_by: [desc: m.inserted_at],
-#     select: %{:content => c.content,
-#      :author => %{:handle => u.handle,
-#                 :first_name => u.first_name,
-#                 :last_name => u.last_name}}
-    # Repo.all(query0)
   end
 
   @doc """
@@ -103,11 +64,6 @@ defmodule Microblog.MicroBlog do
       {:error, %Ecto.Changeset{}}
 
   """
-#   def create_meow(attrs \\ %{}) do
-#     %Meow{}
-#     |> Meow.changeset(attrs)
-#     |> Repo.insert()
-#   end
   def create_meow(attrs \\ %{}) do
     %Meow{}
     |> Meow.changeset(attrs)
@@ -366,5 +322,113 @@ defmodule Microblog.MicroBlog do
   """
   def change_stalk(%Stalk{} = stalk) do
     Stalk.changeset(stalk, %{})
+  end
+
+  alias Microblog.MicroBlog.Like
+
+  @doc """
+  Returns the list of like.
+
+  ## Examples
+
+      iex> list_like()
+      [%Like{}, ...]
+
+  """
+  def list_like do
+    Repo.all(Like)
+  end
+
+  @doc """
+  Gets a single like.
+
+  Raises `Ecto.NoResultsError` if the Like does not exist.
+
+  ## Examples
+
+      iex> get_like!(123)
+      %Like{}
+
+      iex> get_like!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_like!(id), do: Repo.get!(Like, id)
+
+  # stalking = Microblog.MicroBlog.Stalk
+  # |> where([s], s.actor_id == ^user_id)
+  # |> select([s], s.target_id)
+
+  def get_like_by_post(post_id) do
+    stalking = Microblog.MicroBlog.Like
+    |> where([s], s.post_id == ^post_id)
+    |> preload(:actor)
+    |> Repo.all()
+  end
+
+  @doc """
+  Creates a like.
+
+  ## Examples
+
+      iex> create_like(%{field: value})
+      {:ok, %Like{}}
+
+      iex> create_like(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_like(attrs \\ %{}) do
+      %Like{}
+      |> Like.changeset(attrs)
+      |> Repo.insert()  
+    # end
+  end
+
+  @doc """
+  Updates a like.
+
+  ## Examples
+
+      iex> update_like(like, %{field: new_value})
+      {:ok, %Like{}}
+
+      iex> update_like(like, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_like(%Like{} = like, attrs) do
+    like
+    |> Like.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a Like.
+
+  ## Examples
+
+      iex> delete_like(like)
+      {:ok, %Like{}}
+
+      iex> delete_like(like)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_like(%Like{} = like) do
+    Repo.delete(like)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking like changes.
+
+  ## Examples
+
+      iex> change_like(like)
+      %Ecto.Changeset{source: %Like{}}
+
+  """
+  def change_like(%Like{} = like) do
+    Like.changeset(like, %{})
   end
 end

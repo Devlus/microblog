@@ -250,4 +250,62 @@ defmodule Microblog.MicroBlogTest do
       assert %Ecto.Changeset{} = MicroBlog.change_stalk(stalk)
     end
   end
+
+  describe "like" do
+    alias Microblog.MicroBlog.Like
+
+    @valid_attrs %{}
+    @update_attrs %{}
+    @invalid_attrs %{}
+
+    def like_fixture(attrs \\ %{}) do
+      {:ok, like} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> MicroBlog.create_like()
+
+      like
+    end
+
+    test "list_like/0 returns all like" do
+      like = like_fixture()
+      assert MicroBlog.list_like() == [like]
+    end
+
+    test "get_like!/1 returns the like with given id" do
+      like = like_fixture()
+      assert MicroBlog.get_like!(like.id) == like
+    end
+
+    test "create_like/1 with valid data creates a like" do
+      assert {:ok, %Like{} = like} = MicroBlog.create_like(@valid_attrs)
+    end
+
+    test "create_like/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = MicroBlog.create_like(@invalid_attrs)
+    end
+
+    test "update_like/2 with valid data updates the like" do
+      like = like_fixture()
+      assert {:ok, like} = MicroBlog.update_like(like, @update_attrs)
+      assert %Like{} = like
+    end
+
+    test "update_like/2 with invalid data returns error changeset" do
+      like = like_fixture()
+      assert {:error, %Ecto.Changeset{}} = MicroBlog.update_like(like, @invalid_attrs)
+      assert like == MicroBlog.get_like!(like.id)
+    end
+
+    test "delete_like/1 deletes the like" do
+      like = like_fixture()
+      assert {:ok, %Like{}} = MicroBlog.delete_like(like)
+      assert_raise Ecto.NoResultsError, fn -> MicroBlog.get_like!(like.id) end
+    end
+
+    test "change_like/1 returns a like changeset" do
+      like = like_fixture()
+      assert %Ecto.Changeset{} = MicroBlog.change_like(like)
+    end
+  end
 end

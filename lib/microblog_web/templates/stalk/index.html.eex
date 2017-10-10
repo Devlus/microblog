@@ -6,6 +6,7 @@
       <th>Name</th>
       <th>Handle</th>
       <th>Stalked At</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>

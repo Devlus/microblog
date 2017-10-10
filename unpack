@@ -1,0 +1,8 @@
+#!/bin/bash
+
+rm -r ./microblog/*
+cd microblog
+tar xzvf ../microblog.tar.gz
+./bin/microblog migrate
+echo "Be sure to update the version in sites-available if css is messed up"
+rm ../microblog.tar.gz

@@ -1,6 +1,6 @@
 # Microblog
 
-My Message resource can be found at microblog.devonherlitz.solutions
+My site can be found at: microblog.devonherlitz.solutions
 
 In addition to the lecture notes, I modified the sample code provided in:
 https://hexdocs.pm/distillery/running-migrations.html#migration-module

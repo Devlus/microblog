@@ -1,6 +1,6 @@
 # Microblog
 
-https://travis-ci.org/Devlus/microblog.svg?branch=master
+[![Build Status](https://travis-ci.org/Devlus/microblog.svg?branch=master)](https://travis-ci.org/Devlus/microblog)
 
 My site can be found at: microblog.devonherlitz.solutions
 

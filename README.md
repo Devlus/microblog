@@ -1,5 +1,7 @@
 # Microblog
 
+https://travis-ci.org/Devlus/microblog.svg?branch=master
+
 My site can be found at: microblog.devonherlitz.solutions
 
 In addition to the lecture notes, I modified the sample code provided in:

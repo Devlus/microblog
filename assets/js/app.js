@@ -11,7 +11,7 @@
 //
 // If you no longer want to use a dependency, remember
 // to also remove its path from "config.paths.watched".
-import "phoenix_html"
+// import "phoenix_html"
 
 // Import local files
 //
@@ -23,7 +23,7 @@ import socket from "./socket"
 rivets.formatters.log = function (model) {
     console.log(model);
 };
-
+/*
 function handleLikes() {
     let likers = {};
     const likes = $('.like');
@@ -73,7 +73,7 @@ function handleLikes() {
     });
     updateLikes();
 }
-
+*/
 function handleUpdateChannel() {
     let model = { posts: [] };
     let form = $("#post_form");
@@ -92,7 +92,8 @@ function handleUpdateChannel() {
         });
     });
     function getLikesForPosts() {
-        function likeWasClicked(el, model) {
+        function likeWasClicked(el) {
+            debugger;
             const postId = $(this).attr("data-post");
             const userId = $(this).attr("data-user");
             if (!userId) {
@@ -119,19 +120,6 @@ function handleUpdateChannel() {
             $.getJSON("/api/like/" + postId, (data) => {
                 el.likers.list = data.data;
                 el.likers.count = data.data.length;
-                // postLikers.count = postLikers.length;
-                // if (likers[postId]) {
-                //     debugger;
-                //     likers[postId].count = postLikers.count;
-                //     while (likers[postId].length) {
-                //         likers[postId].pop();
-                //     }
-                //     likers[postId].push(...data.data)
-                //     console.log(likers[postId])
-                // } else {
-                //     likers[postId] = postLikers;
-                //     rivets.bind(el, { likers: postLikers });
-                // }
             });
         }
         function updateLikes() {
@@ -166,5 +154,4 @@ function handleUpdateChannel() {
 // let $ = require("jquery");
 $(function () {
     handleUpdateChannel();
-    handleLikes();
 })

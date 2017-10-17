@@ -4,17 +4,12 @@
 
   <li>
     <strong>User:</strong>
-    <%= @meow.user_id %>
+    <%= @meow.author_id %>
   </li>
 
   <li>
     <strong>Content:</strong>
     <%= @meow.content %>
-  </li>
-
-  <li>
-    <strong>Posted dttm:</strong>
-    <%= @meow.posted_dttm %>
   </li>
 
 </ul>

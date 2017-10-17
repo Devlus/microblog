@@ -226,10 +226,6 @@ defmodule Microblog.MicroBlog do
 
 
   def list_stalks_by_actor(actor) do
-    # Stalk 
-    # |> where([s],s.actor_id == ^actor)
-    # # |> preload([:target])
-    # |> Repo.all
     from(s in Stalk, where: s.actor_id == ^actor)
     |> preload([:target])
     |> Repo.all

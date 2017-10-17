@@ -22,13 +22,14 @@ defmodule MicroblogWeb.Router do
     resources "/meow_content", MeowContentController
     resources "/stalk", StalkController
     resources "/user", UserController
-    resources "/api/like", LikeController, except: [:new, :edit]
+    
     post "/sessions", SessionController, :login
     delete "/sessions", SessionController, :logout
   end
-
+  
   # Other scopes may use custom stacks.
-  # scope "/api", MicroblogWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", MicroblogWeb do
+    pipe_through :api
+    resources "/like", LikeController, except: [:new, :edit]
+  end
 end

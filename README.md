@@ -9,6 +9,10 @@ which was recommended in the lecture notes.
 ## REPO
 https://github.com/Devlus/microblog
 
+## Homework 4
+Added ability for posts to be broadcasted to anyone looking at the page of the use who posted, and automatically to the pages of their followers.
+I am certain that my code is wildly inefficient but it seems to works. At the moment, travis is connected, but I am having a database permission error like many other students on piazza.
+
 ## Homework 3
 Liking has been implemented in the microblog. To like a post, login, and go to your profile, or someone else's profile and click the paw on the top right of a post. Once the paw is clicked on, the number next to the paw will be updated as soon as the server is done processing the like. Your handle will also be rendered in the popover list that is presented when you hover over the paw. The server will not allow you to like a post multiple times, just once, but it will gracefully handle the attempt.
 

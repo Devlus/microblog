@@ -224,10 +224,15 @@ defmodule Microblog.MicroBlog do
 
   alias Microblog.MicroBlog.Stalk
 
-
+  # Get everyone who someone follows
   def list_stalks_by_actor(actor) do
     from(s in Stalk, where: s.actor_id == ^actor)
     |> preload([:target])
+    |> Repo.all
+  end
+  # get everyone who follows someone
+  def list_stalks_by_target_only_id(target) do
+    from(s in Stalk, where: s.target_id == ^target)
     |> Repo.all
   end
 

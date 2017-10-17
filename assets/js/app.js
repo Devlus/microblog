@@ -158,6 +158,7 @@ function handleUpdateChannel() {
     channel = socket.channel("updates:" + window.currentUserPageId, {})
     channel.join().receive("ok", connected)
     channel.on("posts", gotPosts)
+    channel.on("should_pull",(data)=>{channel.push("pull", {});})
 }
 
 

@@ -27,12 +27,19 @@ defmodule MicroblogWeb.UpdatesChannel do
     broadcast socket, "posts", %{posts: posts}
     {:noreply, socket}
   end
+  def send_to_follower(follow) do
+    IO.puts("updates:"<>Integer.to_string(follow.actor_id))
+    MicroblogWeb.Endpoint.broadcast("updates:"<>Integer.to_string(follow.actor_id), "should_pull", %{"reason"=>"should_pull"})
+  end
+
 
   def handle_in("post_created", payload, socket) do
     int_id = String.to_integer(socket.assigns[:user_id])
     posts = Enum.map(Microblog.MicroBlog.get_meows_to_display_for_user(int_id), &shape_update/1)
     broadcast socket, "posts", %{posts: posts}
-
+    followers = Microblog.MicroBlog.list_stalks_by_target_only_id(int_id)
+    IO.inspect(followers)
+    Enum.each(followers, &send_to_follower/1)
     {:noreply, socket}
   end
 

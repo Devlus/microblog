@@ -6,8 +6,15 @@ defmodule MicroblogWeb.StalkController do
 
   def index(conn, _params) do
     user_id = get_session(conn, :user_id)
-    stalk = Microblog.MicroBlog.list_stalks_by_actor(user_id)
-    render(conn, "index.html", stalks: stalk)
+    if is_nil(user_id) do
+      IO.puts "No user"
+      conn
+      |> put_flash(:info, "Must be logged in to view followers")
+      |> redirect(to: user_path(conn, :index))
+    else
+      stalk = Microblog.MicroBlog.list_stalks_by_actor(user_id)
+      render(conn, "index.html", stalks: stalk)
+    end
   end
 
   def new(conn, _params) do

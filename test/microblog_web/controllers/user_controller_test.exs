@@ -3,12 +3,14 @@ defmodule MicroblogWeb.UserControllerTest do
 
   alias Microblog.MicroBlog
 
-  @create_attrs %{email: "some email", first_name: "some first_name", handle: "some handle", last_name: "some last_name"}
+  def valid_attrs_meow() do
+    %{email: "a@b.com", handle: "a", first_name: "b", last_name: "c"}
+  end
   @update_attrs %{email: "some updated email", first_name: "some updated first_name", handle: "some updated handle", last_name: "some updated last_name"}
   @invalid_attrs %{email: nil, first_name: nil, handle: nil, last_name: nil}
 
   def fixture(:user) do
-    {:ok, user} = MicroBlog.create_user(@create_attrs)
+    {:ok, user} = MicroBlog.create_user(valid_attrs_meow())
     user
   end
 
@@ -28,13 +30,13 @@ defmodule MicroblogWeb.UserControllerTest do
 
   describe "create user" do
     test "redirects to show when data is valid", %{conn: conn} do
-      conn = post conn, user_path(conn, :create), user: @create_attrs
+      conn = post conn, user_path(conn, :create), user: valid_attrs_meow()
 
       assert %{id: id} = redirected_params(conn)
       assert redirected_to(conn) == user_path(conn, :show, id)
 
       conn = get conn, user_path(conn, :show, id)
-      assert html_response(conn, 200) =~ "Show User"
+      assert html_response(conn, 200) =~ "User created successfully."
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
@@ -60,7 +62,7 @@ defmodule MicroblogWeb.UserControllerTest do
       assert redirected_to(conn) == user_path(conn, :show, user)
 
       conn = get conn, user_path(conn, :show, user)
-      assert html_response(conn, 200) =~ "some updated email"
+      assert html_response(conn, 200) =~ "some updated handle"
     end
 
     test "renders errors when data is invalid", %{conn: conn, user: user} do

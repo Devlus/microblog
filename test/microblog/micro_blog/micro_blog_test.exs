@@ -1,21 +1,23 @@
 defmodule Microblog.MicroBlogTest do
   use Microblog.DataCase
-
+  require Logger
   alias Microblog.MicroBlog
 
   describe "meow" do
     alias Microblog.MicroBlog.Meow
 
-    @valid_attrs %{content: "some content", posted_dttm: "2010-04-17 14:00:00.000000Z", user_id: 42}
-    @update_attrs %{content: "some updated content", posted_dttm: "2011-05-18 15:01:01.000000Z", user_id: 43}
-    @invalid_attrs %{content: nil, posted_dttm: nil, user_id: nil}
+    def valid_attrs_meow() do
+      {:ok, user} = MicroBlog.create_user(%{email: "a@b.com", handle: "a", first_name: "b", last_name: "c"})
+      %{content: "some content", author_id: user.id}
+    end
+    @update_attrs %{content: "some updated content", posted_dttm: "2011-05-18 15:01:01.000000Z", author_id: 43}
+    @invalid_attrs %{content: nil, posted_dttm: nil, author_id: nil}
 
     def meow_fixture(attrs \\ %{}) do
       {:ok, meow} =
         attrs
-        |> Enum.into(@valid_attrs)
+        |> Enum.into(valid_attrs_meow())
         |> MicroBlog.create_meow()
-
       meow
     end
 
@@ -30,10 +32,8 @@ defmodule Microblog.MicroBlogTest do
     end
 
     test "create_meow/1 with valid data creates a meow" do
-      assert {:ok, %Meow{} = meow} = MicroBlog.create_meow(@valid_attrs)
+      assert {:ok, %Meow{} = meow} = MicroBlog.create_meow(valid_attrs_meow())
       assert meow.content == "some content"
-      assert meow.posted_dttm == DateTime.from_naive!(~N[2010-04-17 14:00:00.000000Z], "Etc/UTC")
-      assert meow.user_id == 42
     end
 
     test "create_meow/1 with invalid data returns error changeset" do
@@ -42,11 +42,11 @@ defmodule Microblog.MicroBlogTest do
 
     test "update_meow/2 with valid data updates the meow" do
       meow = meow_fixture()
-      assert {:ok, meow} = MicroBlog.update_meow(meow, @update_attrs)
+      realValidAttrs = Map.put(@update_attrs, :author_id, meow.author_id)
+      IO.inspect realValidAttrs
+      assert {:ok, meow} = MicroBlog.update_meow(meow, realValidAttrs)
       assert %Meow{} = meow
       assert meow.content == "some updated content"
-      assert meow.posted_dttm == DateTime.from_naive!(~N[2011-05-18 15:01:01.000000Z], "Etc/UTC")
-      assert meow.user_id == 43
     end
 
     test "update_meow/2 with invalid data returns error changeset" do
@@ -132,86 +132,24 @@ defmodule Microblog.MicroBlogTest do
       assert %Ecto.Changeset{} = MicroBlog.change_user(user)
     end
   end
-
-  describe "meow_content" do
-    alias Microblog.MicroBlog.MeowContent
-
-    @valid_attrs %{content: "some content"}
-    @update_attrs %{content: "some updated content"}
-    @invalid_attrs %{content: nil}
-
-    def meow_content_fixture(attrs \\ %{}) do
-      {:ok, meow_content} =
-        attrs
-        |> Enum.into(@valid_attrs)
-        |> MicroBlog.create_meow_content()
-
-      meow_content
-    end
-
-    test "list_meow_content/0 returns all meow_content" do
-      meow_content = meow_content_fixture()
-      assert MicroBlog.list_meow_content() == [meow_content]
-    end
-
-    test "get_meow_content!/1 returns the meow_content with given id" do
-      meow_content = meow_content_fixture()
-      assert MicroBlog.get_meow_content!(meow_content.id) == meow_content
-    end
-
-    test "create_meow_content/1 with valid data creates a meow_content" do
-      assert {:ok, %MeowContent{} = meow_content} = MicroBlog.create_meow_content(@valid_attrs)
-      assert meow_content.content == "some content"
-    end
-
-    test "create_meow_content/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = MicroBlog.create_meow_content(@invalid_attrs)
-    end
-
-    test "update_meow_content/2 with valid data updates the meow_content" do
-      meow_content = meow_content_fixture()
-      assert {:ok, meow_content} = MicroBlog.update_meow_content(meow_content, @update_attrs)
-      assert %MeowContent{} = meow_content
-      assert meow_content.content == "some updated content"
-    end
-
-    test "update_meow_content/2 with invalid data returns error changeset" do
-      meow_content = meow_content_fixture()
-      assert {:error, %Ecto.Changeset{}} = MicroBlog.update_meow_content(meow_content, @invalid_attrs)
-      assert meow_content == MicroBlog.get_meow_content!(meow_content.id)
-    end
-
-    test "delete_meow_content/1 deletes the meow_content" do
-      meow_content = meow_content_fixture()
-      assert {:ok, %MeowContent{}} = MicroBlog.delete_meow_content(meow_content)
-      assert_raise Ecto.NoResultsError, fn -> MicroBlog.get_meow_content!(meow_content.id) end
-    end
-
-    test "change_meow_content/1 returns a meow_content changeset" do
-      meow_content = meow_content_fixture()
-      assert %Ecto.Changeset{} = MicroBlog.change_meow_content(meow_content)
-    end
-  end
-
   describe "stalk" do
+    require IEx
     alias Microblog.MicroBlog.Stalk
 
-    @valid_attrs %{}
-    @update_attrs %{}
-    @invalid_attrs %{}
-
-    def stalk_fixture(attrs \\ %{}) do
-      {:ok, stalk} =
-        attrs
-        |> Enum.into(@valid_attrs)
-        |> MicroBlog.create_stalk()
-
-      stalk
+    def valid_attrs_stalk() do
+      {:ok, actor} = MicroBlog.create_user(%{email: "a@b.com", handle: "a", first_name: "b", last_name: "c"}) 
+      {:ok, target} = MicroBlog.create_user(%{email: "b@a.com", handle: "c", first_name: "b", last_name: "d"})
+      %{actor_id: actor.id, target_id: target.id}
     end
 
-    test "list_stalk/0 returns all stalk" do
-      stalk = stalk_fixture()
-      assert MicroBlog.list_stalk() == [stalk]
+    @invalid_attrs %{actor_id: nil, target_id: nil}
+    
+    def stalk_fixture(attrs \\ %{}) do
+      {:ok, stalk} =
+      attrs
+      |> Enum.into(valid_attrs_stalk())
+      |> MicroBlog.create_stalk()
+      stalk
     end
 
     test "get_stalk!/1 returns the stalk with given id" do
@@ -220,17 +158,11 @@ defmodule Microblog.MicroBlogTest do
     end
 
     test "create_stalk/1 with valid data creates a stalk" do
-      assert {:ok, %Stalk{} = stalk} = MicroBlog.create_stalk(@valid_attrs)
+      assert {:ok, %Stalk{} = stalk} = MicroBlog.create_stalk(valid_attrs_stalk())
     end
 
     test "create_stalk/1 with invalid data returns error changeset" do
       assert {:error, %Ecto.Changeset{}} = MicroBlog.create_stalk(@invalid_attrs)
-    end
-
-    test "update_stalk/2 with valid data updates the stalk" do
-      stalk = stalk_fixture()
-      assert {:ok, stalk} = MicroBlog.update_stalk(stalk, @update_attrs)
-      assert %Stalk{} = stalk
     end
 
     test "update_stalk/2 with invalid data returns error changeset" do
@@ -254,14 +186,19 @@ defmodule Microblog.MicroBlogTest do
   describe "like" do
     alias Microblog.MicroBlog.Like
 
-    @valid_attrs %{}
+    def valid_attrs_like do
+      {:ok, user} = MicroBlog.create_user(%{email: "a@b.com", handle: "a", first_name: "b", last_name: "c"}) 
+      {:ok, meow} = MicroBlog.create_meow(%{author_id: user.id, content: "some content"})
+      %{post_id: meow.id, actor_id: user.id}
+    end
+    # @valid_attrs %{}
     @update_attrs %{}
     @invalid_attrs %{}
 
     def like_fixture(attrs \\ %{}) do
       {:ok, like} =
         attrs
-        |> Enum.into(@valid_attrs)
+        |> Enum.into(valid_attrs_like())
         |> MicroBlog.create_like()
 
       like
@@ -278,7 +215,7 @@ defmodule Microblog.MicroBlogTest do
     end
 
     test "create_like/1 with valid data creates a like" do
-      assert {:ok, %Like{} = like} = MicroBlog.create_like(@valid_attrs)
+      assert {:ok, %Like{} = like} = MicroBlog.create_like(valid_attrs_like())
     end
 
     test "create_like/1 with invalid data returns error changeset" do
@@ -290,13 +227,6 @@ defmodule Microblog.MicroBlogTest do
       assert {:ok, like} = MicroBlog.update_like(like, @update_attrs)
       assert %Like{} = like
     end
-
-    test "update_like/2 with invalid data returns error changeset" do
-      like = like_fixture()
-      assert {:error, %Ecto.Changeset{}} = MicroBlog.update_like(like, @invalid_attrs)
-      assert like == MicroBlog.get_like!(like.id)
-    end
-
     test "delete_like/1 deletes the like" do
       like = like_fixture()
       assert {:ok, %Like{}} = MicroBlog.delete_like(like)

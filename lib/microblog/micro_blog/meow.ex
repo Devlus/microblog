@@ -17,6 +17,7 @@ defmodule Microblog.MicroBlog.Meow do
   def changeset(%Meow{} = meow, attrs) do
     meow
     |> cast(attrs, [:author_id, :content])
+    |> foreign_key_constraint(:author_id)
     |> validate_required([:author_id, :content])
   end
 end

@@ -16,7 +16,7 @@ config :microblog, MicroblogWeb.Endpoint,
   render_errors: [view: MicroblogWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Microblog.PubSub,
            adapter: Phoenix.PubSub.PG2]
-
+  
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

@@ -25,6 +25,7 @@ defmodule MicroblogWeb.SessionController do
     end
   
     def logout(conn, _params) do
+      IO.puts "Attempting to logout"
       conn
       |> put_session(:user_id, nil)
       |> put_flash(:info, "Logged out")

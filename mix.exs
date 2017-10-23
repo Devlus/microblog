@@ -43,8 +43,7 @@ defmodule Microblog.Mixfile do
       {:cowboy, "~> 1.0"},
       {:distillery,"~>1.4"},
       {:comeonin, "~> 4.0"},
-      {:argon2_elixir, "~> 1.2"},
-      {:elixir_make, "~> 0.4.0"}
+      {:pbkdf2_elixir, "~> 0.12"},
     ]
   end
 

@@ -43,10 +43,8 @@ defmodule Microblog.MicroBlog.User do
 
   def put_pass_hash(%Ecto.Changeset{valid?: true, changes: %{password: password}} = changeset) do
     IO.puts("Saving Password")
-    changes = Comeonin.Argon2.add_hash(password)
-    IO.inspect(changes)
+    changes = Comeonin.Pbkdf2.add_hash(password)
     result = change(changeset, changes)
-    IO.inspect(result)
     result
   end
   def put_pass_hash(changeset), do: changeset

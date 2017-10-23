@@ -102,5 +102,8 @@ function handleUpdateChannel() {
 
 // let $ = require("jquery");
 $(function () {
-    handleUpdateChannel();
+    let form = $("#post_form");
+    if(document.location.pathname.match(/\/user\/\d+/)){
+        handleUpdateChannel();
+    }
 })

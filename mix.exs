@@ -20,13 +20,13 @@ defmodule Microblog.Mixfile do
   def application do
     [
       mod: {Microblog.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :arc_ecto],
     ]
   end
 
   # Specifies which paths to compile per environment.
   defp elixirc_paths(:test), do: ["lib", "test/support"]
-  defp elixirc_paths(_),     do: ["lib"]
+  defp elixirc_paths(_),     do: ["web","lib"]
 
   # Specifies your project dependencies.
   #
@@ -41,7 +41,13 @@ defmodule Microblog.Mixfile do
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
-      {:distillery,"~>1.4"}
+      {:distillery,"~>1.4"},
+      {:comeonin, "~> 4.0"},
+      {:pbkdf2_elixir, "~> 0.12"},
+      {:earmark, "~> 1.2.2" },
+      {:html_sanitize_ex, "~> 1.3.0-rc3"},
+      {:arc, "~> 0.8.0"},
+      {:arc_ecto, "~> 0.7.0"}
     ]
   end
 

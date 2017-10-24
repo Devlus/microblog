@@ -27,8 +27,11 @@ defmodule MicroblogWeb.StalkController do
       {:ok, stalk} ->
         conn
         |> put_flash(:info, "Stalk created successfully.")
-        |> redirect(to: stalk_path(conn, :show, stalk))
+        |> redirect(to: user_path(conn, :show, stalk_params["actor_id"]))
       {:error, %Ecto.Changeset{} = changeset} ->
+        conn
+        |> put_flash(:info, "Could not stalk user.")
+        |> redirect(to: user_path(conn, :show, stalk_params["target_id"]))
         render(conn, "new.html", changeset: changeset)
     end
   end

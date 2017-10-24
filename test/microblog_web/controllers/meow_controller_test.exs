@@ -4,7 +4,7 @@ defmodule MicroblogWeb.MeowControllerTest do
   alias Microblog.MicroBlog
 
   def valid_attrs_meow() do
-    {:ok, user} = MicroBlog.create_user(%{email: "a@b.com", handle: "a", first_name: "b", last_name: "c"})
+    {:ok, user} = MicroBlog.create_user(%{password: "applesauce", email: "a@b.com", handle: "a", first_name: "b", last_name: "c"})
     %{content: "some content", author_id: user.id}
   end
 
@@ -24,7 +24,7 @@ defmodule MicroblogWeb.MeowControllerTest do
 
   describe "index" do
     test "lists all meow", %{conn: conn} do
-      conn = get conn, meow_path(conn, :index)
+      conn = get conn, meow_path(conn, :index)<>"?term=abc"
       assert html_response(conn, 200) =~ "Listing Meow"
     end
   end
@@ -58,7 +58,8 @@ defmodule MicroblogWeb.MeowControllerTest do
 
   describe "edit meow" do
     setup [:create_meow]
-
+    @tag :skip
+    #editing is not supported
     test "renders form for editing chosen meow", %{conn: conn, meow: meow} do
       conn = get conn, meow_path(conn, :edit, meow)
       assert html_response(conn, 200) =~ "Edit Meow"
@@ -67,7 +68,8 @@ defmodule MicroblogWeb.MeowControllerTest do
 
   describe "update meow" do
     setup [:create_meow]
-
+    @tag :skip
+    #update is not support
     test "redirects when data is valid", %{conn: conn, meow: meow} do
       update_attrs = %{author_id: meow.author_id, content: "some updated content"}
       conn = put conn, meow_path(conn, :update, meow), meow: update_attrs
@@ -76,7 +78,8 @@ defmodule MicroblogWeb.MeowControllerTest do
       conn = get conn, meow_path(conn, :show, meow)
       assert html_response(conn, 200) =~ "some updated content"
     end
-
+    @tag :skip
+    #update is not support
     test "renders errors when data is invalid", %{conn: conn, meow: meow} do
       conn = put conn, meow_path(conn, :update, meow), meow: @invalid_attrs
       assert html_response(conn, 200) =~ "Edit Meow"
@@ -85,7 +88,8 @@ defmodule MicroblogWeb.MeowControllerTest do
 
   describe "delete meow" do
     setup [:create_meow]
-
+    @tag :skip
+    #delete is not supported
     test "deletes chosen meow", %{conn: conn, meow: meow} do
       conn = delete conn, meow_path(conn, :delete, meow)
       assert redirected_to(conn) == meow_path(conn, :index)

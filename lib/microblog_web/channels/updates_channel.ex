@@ -15,11 +15,15 @@ defmodule MicroblogWeb.UpdatesChannel do
     {:reply, {:ok, payload}, socket}
   end
   def shape_update(meow) do
-    %{"content" => meow.content, "id"=> meow.id, "author" =>
-     %{"id"=>meow.author.id,
-      "first"=>meow.author.first_name,
-      "last"=>meow.author.last_name,
-      "handle"=>meow.author.handle}}
+    case Earmark.as_html(meow.content) do
+      {:ok, html_doc, []} ->
+        html_doc = HtmlSanitizeEx.markdown_html(html_doc)
+        %{"content" => html_doc, "id"=> meow.id, "author" =>
+        %{"id"=>meow.author.id,
+        "first"=>meow.author.first_name,
+        "last"=>meow.author.last_name,
+        "handle"=>meow.author.handle}}
+      end
   end
   def handle_in("pull", payload, socket) do
     int_id = String.to_integer(socket.assigns[:user_id])

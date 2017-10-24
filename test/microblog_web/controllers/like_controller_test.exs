@@ -7,7 +7,7 @@ defmodule MicroblogWeb.LikeControllerTest do
   alias Microblog.MicroBlog.Like
 
   def valid_attrs_like do
-    {:ok, user} = MicroBlog.create_user(%{email: "a@b.com", handle: "a", first_name: "b", last_name: "c"}) 
+    {:ok, user} = MicroBlog.create_user(%{password: "applesauce", email: "a@b.com", handle: "a", first_name: "b", last_name: "c"}) 
     {:ok, meow} = MicroBlog.create_meow(%{author_id: user.id, content: "some content"})
     %{post_id: meow.id, actor_id: user.id}
   end

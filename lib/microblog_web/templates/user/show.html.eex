@@ -2,7 +2,21 @@
     <div class="row justify-content-center">
         <div class="col-4">
             <div class="row mb-3">
-                <div class="col-md-6"><i style="font-size: 7rem" class="fa fa-user" aria-hidden="true"></i></div>
+                <%= if(@user.icon) do %>
+                    <div class="col-md-6">
+                        <img width="100" src=<%="/uploads/" <> @user.icon.file_name %>/>
+                    </div>
+                <% else %>
+                    <div class="col-md-6"><i style="font-size: 7rem" class="fa fa-user" aria-hidden="true"></i></div>
+                <% end %>
+
+                <%= if( @current_user != nil && @current_user.id == @user.id ) do %>
+                    <%= form_for @conn, icon_path(@conn, :create),[multipart: true, as: "icon", id: "icon_form"], fn f -> %>
+                         <label>Change Icon</lable>
+                         <%= file_input f, :icon, id: "icon_file" %>
+                    <%end%>
+                <%end%>
+                
                 <div class="col-md-6 row">
                     <span class="col-md-12"><%= @user.first_name %> <%= @user.last_name %></span>
                     <span class="col-md-12">@<%= @user.handle %></span>
@@ -64,8 +78,8 @@
                                 </span>
                             </div>
                             
-                            <div class="card-text">
-                                { post.content }
+                            <div rv-html="post.content" class="card-text">
+                                <%# { post.content } %>
                             </div>
                         </div>
                         <div class="card-footer">
@@ -82,5 +96,5 @@
     </div>
 </div>
 <script>
-    window.currentUserPageId = <%=@user.id%>;
+    window.currentUserPageId = <%=@user.id %>;
 </script>

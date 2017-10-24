@@ -5,7 +5,10 @@ defmodule MicroblogWeb.MeowController do
   alias Microblog.MicroBlog.Meow
 
   def index(conn, _params) do
-    meow = MicroBlog.list_meow()
+    IO.puts("Got here")
+    IO.inspect(_params)
+    meow = MicroBlog.search_meow(_params["term"])
+    IO.inspect(meow)
     render(conn, "index.html", meow: meow)
   end
 

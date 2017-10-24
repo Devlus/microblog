@@ -7,9 +7,10 @@ defmodule MicroblogWeb.SessionController do
   
     alias Microblog.MicroBlog
   
-    def login(conn, %{"user" => %{"email" => email}}) do
+    def login(conn, %{"user" => %{"email" => email, "password"=>password}}) do
       IO.puts "Attempting to login: "<>email
-      user = MicroBlog.get_user_by_email(email)
+      IO.puts "Attempting to login: "<>password
+      user = MicroBlog.get_and_auth_user(email, password)
   
       if user do
         conn
@@ -19,7 +20,7 @@ defmodule MicroblogWeb.SessionController do
       else
         conn
         |> put_session(:user_id, nil)
-        |> put_flash(:error, "No such user")
+        |> put_flash(:error, "Login Failed, please check your credentials")
         |> redirect(to: user_path(conn, :index))
       end
     end

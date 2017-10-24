@@ -53,8 +53,8 @@
                     <li class="nav-item d-block d-md-none w-100">
                         <form class="form-inline">
                             <div class="input-group w-100">
-                                <input type="text" class="form-control" placeholder="Username">
-                                <span class="input-group-addon btn-primary"><i class="fa fa-user" aria-hidden="true"></i></span>
+                                <input type="text" class="form-control" placeholder="Search"> %>
+                                <span class="search input-group-addon btn-primary"><i class="fa fa-user" aria-hidden="true"></i></span>
                             </div>
                         </form>
                     </li>
@@ -62,9 +62,9 @@
             </div>
             
             <form class="form-inline d-none d-md-flex mr-auto ml-auto">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Username">
-                    <span class="input-group-addon btn-primary"><i class="fa fa-user" aria-hidden="true"></i></span>
+                <div class="input-group">            
+                    <input type="text" class="form-control" placeholder="Search">
+                    <span class="search input-group-addon btn-primary"><i class="fa fa-user" aria-hidden="true"></i></span>
                 </div>
             </form>
 
@@ -127,6 +127,12 @@
         });
         $("#icon_file").change(function(){
             $("#icon_form").submit();
+        });
+        $(".search").click(function(){
+            var term = $(this).siblings('input').first().val()
+            document.location = "<%= meow_path(@conn, :index)%>?term="+term;
+            console.log("here");
+            debugger;
         });
     });
     

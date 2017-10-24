@@ -20,6 +20,14 @@ defmodule Microblog.MicroBlog do
   def list_meow do
     Repo.all(Meow)
   end
+  def search_meow(param) do
+    term = "%"<>param<>"%"
+    meows = Meow
+    |> where([m], like(m.content, ^term))
+    |> order_by([m],[desc: m.inserted_at])
+    |> preload([:author])
+    |> Repo.all
+  end
 
   @doc """
   Gets a single meow.

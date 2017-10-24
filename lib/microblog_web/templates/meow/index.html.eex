@@ -1,29 +1,23 @@
 <h2>Listing Meow</h2>
-
-<table class="table">
-  <thead>
-    <tr>
-      <th>User</th>
-      <th>Content</th>
-      <th>Posted dttm</th>
-
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
 <%= for meow <- @meow do %>
-    <tr>
-      <td><%= meow.author_id %></td>
-      <td><%= meow.content_id %></td>
-
-      <td class="text-right">
-        <span><%= link "Show", to: meow_path(@conn, :show, meow), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Edit", to: meow_path(@conn, :edit, meow), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Delete", to: meow_path(@conn, :delete, meow), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
-      </td>
-    </tr>
+<div class="card mb-2">
+      <div class="card-body">
+          <div class="card-title d-flex flex-nowrap">
+              <div class="d-flex mr-auto flex-wrap flex-md-row flex-column">
+                  <span class="user-name p-md-2"><%= meow.author.first_name%> <%= meow.author.last_name%></span>
+                  <span class="user-handle p-md-2">@<%= meow.author.handle%> </span>
+              </div>
+          </div>
+          
+          <div class="card-text">
+              <%= meow.content %>
+          </div>
+      </div>
+      <div class="card-footer">
+          <div class="input-group w-100">
+              <input type="text" class="form-control" placeholder="Reply...">
+              <span class="btn btn-primary input-group-addon"><i class="fa fa-send-o" aria-hidden="true"></i></span>
+          </div>
+      </div>
+  </div>
 <% end %>
-  </tbody>
-</table>
-
-<span><%= link "New Meow", to: meow_path(@conn, :new) %></span>

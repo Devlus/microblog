@@ -11,6 +11,29 @@ which was recommended in the lecture notes.
 ## REPO
 https://github.com/Devlus/microblog
 
+## Homework 5
+**Preface:** I relied heavily on Nat's notes and code for setting up passwords. I changed things as needed, but generally what he wrote with us in class was sufficient for my needs. 
+
+I also followed this tutorial for setting up image uploads:\
+https://medium.com/@Stephanbv/elixir-phoenix-uploading-images-locally-with-arc-b1d5ec88f7a
+
+What I did:
+I added passwords, ssl certs, Markdown, and Searching by terms.
+
+I also removed unused routes, and hid some screen that shouldn't have been presented to the user.
+
+The passwords are pretty straight forward, click the login button after creating an account. And enter your credentials into the super fancy modal that opens. I am not encrypting with argon because my server was having trouble compiling the C it relies on so I am using pbkdf2 instead.
+
+Markdown is rendered and sanitized. Just create a post and watch it go.
+
+Searching is based only on message content, and is a `contains` filter for the search term.
+
+ssl was just cert bot magic.
+
+Images only work locally, which is apparenly okay according to:\
+https://piazza.com/class/j61milf8rku5pe?cid=265
+
+
 ## Homework 4
 Added ability for posts to be broadcasted to anyone looking at the page of the use who posted, and automatically to the pages of their followers.
 I am certain that my code is wildly inefficient but it seems to works.

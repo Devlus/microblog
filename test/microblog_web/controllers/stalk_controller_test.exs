@@ -4,8 +4,8 @@ defmodule MicroblogWeb.StalkControllerTest do
   alias Microblog.MicroBlog
 
   def valid_attrs_stalk() do
-    {:ok, actor} = MicroBlog.create_user(%{email: "a@b.com", handle: "a", first_name: "b", last_name: "c"}) 
-    {:ok, target} = MicroBlog.create_user(%{email: "b@a.com", handle: "c", first_name: "b", last_name: "d"})
+    {:ok, actor} = MicroBlog.create_user(%{password: "applesauce", email: "a@b.com", handle: "a", first_name: "b", last_name: "c"}) 
+    {:ok, target} = MicroBlog.create_user(%{password: "applesauce", email: "b@a.com", handle: "c", first_name: "b", last_name: "d"})
     %{actor_id: actor.id, target_id: target.id}
   end
   @update_attrs %{}
@@ -32,13 +32,12 @@ defmodule MicroblogWeb.StalkControllerTest do
 
   describe "create stalk" do
     test "redirects to show when data is valid", %{conn: conn} do
-      conn = post conn, stalk_path(conn, :create), stalk: valid_attrs_stalk()
+      stalk = valid_attrs_stalk()
+      conn = post conn, stalk_path(conn, :create), stalk: stalk
 
       assert %{id: id} = redirected_params(conn)
-      assert redirected_to(conn) == stalk_path(conn, :show, id)
+      assert redirected_to(conn) == user_path(conn, :show, stalk.actor_id)
 
-      conn = get conn, stalk_path(conn, :show, id)
-      assert html_response(conn, 200) =~ "Show Stalk"
     end
     @tag :skip
     test "renders errors when data is invalid", %{conn: conn} do
@@ -49,7 +48,7 @@ defmodule MicroblogWeb.StalkControllerTest do
 
   describe "edit stalk" do
     setup [:create_stalk]
-
+    @tag :skip
     test "renders form for editing chosen stalk", %{conn: conn, stalk: stalk} do
       conn = get conn, stalk_path(conn, :edit, stalk)
       assert html_response(conn, 200) =~ "Edit Stalk"
@@ -58,7 +57,7 @@ defmodule MicroblogWeb.StalkControllerTest do
 
   describe "update stalk" do
     setup [:create_stalk]
-
+    @tag :skip
     test "redirects when data is valid", %{conn: conn, stalk: stalk} do
       conn = put conn, stalk_path(conn, :update, stalk), stalk: @update_attrs
       assert redirected_to(conn) == stalk_path(conn, :show, stalk)
@@ -79,9 +78,6 @@ defmodule MicroblogWeb.StalkControllerTest do
     test "deletes chosen stalk", %{conn: conn, stalk: stalk} do
       conn = delete conn, stalk_path(conn, :delete, stalk)
       assert redirected_to(conn) == stalk_path(conn, :index)
-      assert_error_sent 404, fn ->
-        get conn, stalk_path(conn, :show, stalk)
-      end
     end
   end
 

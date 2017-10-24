@@ -18,9 +18,9 @@ defmodule MicroblogWeb.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", UserController, :index
-    resources "/meow", MeowController, except: [:show, :index, :edit]
+    resources "/meow", MeowController, except: [:show, :edit, :delete, :update]
     resources "/stalk", StalkController, except: [:show, :edit]
-    resources "/user", UserController, except: [:delete]
+    resources "/user", UserController, except: [:delete, :edit]
 
     post "/icon", IconController, :create
     post "/sessions", SessionController, :login

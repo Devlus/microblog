@@ -4,9 +4,9 @@ defmodule MicroblogWeb.UserControllerTest do
   alias Microblog.MicroBlog
 
   def valid_attrs_meow() do
-    %{email: "a@b.com", handle: "a", first_name: "b", last_name: "c"}
+    %{password: "applesauce", email: "a@b.com", handle: "a", first_name: "b", last_name: "c"}
   end
-  @update_attrs %{email: "some updated email", first_name: "some updated first_name", handle: "some updated handle", last_name: "some updated last_name"}
+  @update_attrs %{password: "applesauce", email: "some updated email", first_name: "some updated first_name", handle: "some updated handle", last_name: "some updated last_name"}
   @invalid_attrs %{email: nil, first_name: nil, handle: nil, last_name: nil}
 
   def fixture(:user) do
@@ -47,7 +47,8 @@ defmodule MicroblogWeb.UserControllerTest do
 
   describe "edit user" do
     setup [:create_user]
-
+    @tag :skip
+    #don't support editing
     test "renders form for editing chosen user", %{conn: conn, user: user} do
       conn = get conn, user_path(conn, :edit, user)
       assert html_response(conn, 200) =~ "Edit User"
@@ -55,8 +56,7 @@ defmodule MicroblogWeb.UserControllerTest do
   end
 
   describe "update user" do
-    setup [:create_user]
-
+    setup [:create_user]    
     test "redirects when data is valid", %{conn: conn, user: user} do
       conn = put conn, user_path(conn, :update, user), user: @update_attrs
       assert redirected_to(conn) == user_path(conn, :show, user)
@@ -73,7 +73,8 @@ defmodule MicroblogWeb.UserControllerTest do
 
   describe "delete user" do
     setup [:create_user]
-
+    @tag :skip
+    #don't support deletes
     test "deletes chosen user", %{conn: conn, user: user} do
       conn = delete conn, user_path(conn, :delete, user)
       assert redirected_to(conn) == user_path(conn, :index)

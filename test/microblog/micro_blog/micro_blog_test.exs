@@ -7,7 +7,7 @@ defmodule Microblog.MicroBlogTest do
     alias Microblog.MicroBlog.Meow
 
     def valid_attrs_meow() do
-      {:ok, user} = MicroBlog.create_user(%{email: "a@b.com", handle: "a", first_name: "b", last_name: "c"})
+      {:ok, user} = MicroBlog.create_user(%{password: "applesauce" ,email: "a@b.com", handle: "a", first_name: "b", last_name: "c"})
       %{content: "some content", author_id: user.id}
     end
     @update_attrs %{content: "some updated content", posted_dttm: "2011-05-18 15:01:01.000000Z", author_id: 43}
@@ -70,7 +70,7 @@ defmodule Microblog.MicroBlogTest do
   describe "user" do
     alias Microblog.MicroBlog.User
 
-    @valid_attrs %{email: "some email", first_name: "some first_name", handle: "some handle", last_name: "some last_name"}
+    @valid_attrs %{password: "applesauce", email: "some email", first_name: "some first_name", handle: "some handle", last_name: "some last_name"}
     @update_attrs %{email: "some updated email", first_name: "some updated first_name", handle: "some updated handle", last_name: "some updated last_name"}
     @invalid_attrs %{email: nil, first_name: nil, handle: nil, last_name: nil}
 
@@ -85,12 +85,12 @@ defmodule Microblog.MicroBlogTest do
 
     test "list_user/0 returns all user" do
       user = user_fixture()
-      assert MicroBlog.list_user() == [user]
+      assert Enum.map(MicroBlog.list_user(),fn e -> e.id end) == [user.id]
     end
 
     test "get_user!/1 returns the user with given id" do
       user = user_fixture()
-      assert MicroBlog.get_user!(user.id) == user
+      assert MicroBlog.get_user!(user.id).id == user.id
     end
 
     test "create_user/1 with valid data creates a user" do
@@ -118,7 +118,7 @@ defmodule Microblog.MicroBlogTest do
     test "update_user/2 with invalid data returns error changeset" do
       user = user_fixture()
       assert {:error, %Ecto.Changeset{}} = MicroBlog.update_user(user, @invalid_attrs)
-      assert user == MicroBlog.get_user!(user.id)
+      assert user.id == MicroBlog.get_user!(user.id).id
     end
 
     test "delete_user/1 deletes the user" do
@@ -137,8 +137,8 @@ defmodule Microblog.MicroBlogTest do
     alias Microblog.MicroBlog.Stalk
 
     def valid_attrs_stalk() do
-      {:ok, actor} = MicroBlog.create_user(%{email: "a@b.com", handle: "a", first_name: "b", last_name: "c"}) 
-      {:ok, target} = MicroBlog.create_user(%{email: "b@a.com", handle: "c", first_name: "b", last_name: "d"})
+      {:ok, actor} = MicroBlog.create_user(%{password: "applesauce", email: "a@b.com", handle: "a", first_name: "b", last_name: "c"}) 
+      {:ok, target} = MicroBlog.create_user(%{password: "applesauce", email: "b@a.com", handle: "c", first_name: "b", last_name: "d"})
       %{actor_id: actor.id, target_id: target.id}
     end
 
@@ -187,7 +187,7 @@ defmodule Microblog.MicroBlogTest do
     alias Microblog.MicroBlog.Like
 
     def valid_attrs_like do
-      {:ok, user} = MicroBlog.create_user(%{email: "a@b.com", handle: "a", first_name: "b", last_name: "c"}) 
+      {:ok, user} = MicroBlog.create_user(%{password: "applesauce", email: "a@b.com", handle: "a", first_name: "b", last_name: "c"}) 
       {:ok, meow} = MicroBlog.create_meow(%{author_id: user.id, content: "some content"})
       %{post_id: meow.id, actor_id: user.id}
     end
@@ -236,64 +236,6 @@ defmodule Microblog.MicroBlogTest do
     test "change_like/1 returns a like changeset" do
       like = like_fixture()
       assert %Ecto.Changeset{} = MicroBlog.change_like(like)
-    end
-  end
-
-  describe "icon" do
-    alias Microblog.MicroBlog.Icon
-
-    @valid_attrs %{}
-    @update_attrs %{}
-    @invalid_attrs %{}
-
-    def icon_fixture(attrs \\ %{}) do
-      {:ok, icon} =
-        attrs
-        |> Enum.into(@valid_attrs)
-        |> MicroBlog.create_icon()
-
-      icon
-    end
-
-    test "list_icon/0 returns all icon" do
-      icon = icon_fixture()
-      assert MicroBlog.list_icon() == [icon]
-    end
-
-    test "get_icon!/1 returns the icon with given id" do
-      icon = icon_fixture()
-      assert MicroBlog.get_icon!(icon.id) == icon
-    end
-
-    test "create_icon/1 with valid data creates a icon" do
-      assert {:ok, %Icon{} = icon} = MicroBlog.create_icon(@valid_attrs)
-    end
-
-    test "create_icon/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = MicroBlog.create_icon(@invalid_attrs)
-    end
-
-    test "update_icon/2 with valid data updates the icon" do
-      icon = icon_fixture()
-      assert {:ok, icon} = MicroBlog.update_icon(icon, @update_attrs)
-      assert %Icon{} = icon
-    end
-
-    test "update_icon/2 with invalid data returns error changeset" do
-      icon = icon_fixture()
-      assert {:error, %Ecto.Changeset{}} = MicroBlog.update_icon(icon, @invalid_attrs)
-      assert icon == MicroBlog.get_icon!(icon.id)
-    end
-
-    test "delete_icon/1 deletes the icon" do
-      icon = icon_fixture()
-      assert {:ok, %Icon{}} = MicroBlog.delete_icon(icon)
-      assert_raise Ecto.NoResultsError, fn -> MicroBlog.get_icon!(icon.id) end
-    end
-
-    test "change_icon/1 returns a icon changeset" do
-      icon = icon_fixture()
-      assert %Ecto.Changeset{} = MicroBlog.change_icon(icon)
     end
   end
 end

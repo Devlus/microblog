@@ -16,6 +16,8 @@ config :microblog, MicroblogWeb.Endpoint,
   render_errors: [view: MicroblogWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Microblog.PubSub,
            adapter: Phoenix.PubSub.PG2]
+  config :arc,
+    storage: Arc.Storage.Local
   
 # Configures Elixir's Logger
 config :logger, :console,

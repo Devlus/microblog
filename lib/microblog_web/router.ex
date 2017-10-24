@@ -23,6 +23,7 @@ defmodule MicroblogWeb.Router do
     resources "/stalk", StalkController
     resources "/user", UserController
     
+    post "/icon", IconController, :create
     post "/sessions", SessionController, :login
     delete "/sessions", SessionController, :logout
   end

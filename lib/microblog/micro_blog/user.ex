@@ -1,8 +1,8 @@
 defmodule Microblog.MicroBlog.User do
+  use Arc.Ecto.Schema
   use Ecto.Schema
   import Ecto.Changeset
   alias Microblog.MicroBlog.User
-
 
   schema "user" do
     field :email, :string
@@ -14,6 +14,7 @@ defmodule Microblog.MicroBlog.User do
     field :pw_tries, :integer
     field :pw_last_try, :utc_datetime
     field :password, :string, virtual: true
+    field :icon, Microblog.Icon.Type
     #</From Nat's Lecture Notes>
     has_many(:meows, Microblog.MicroBlog.Meow)
     timestamps()
@@ -22,12 +23,19 @@ defmodule Microblog.MicroBlog.User do
   @doc false
   def changeset(%User{} = user, attrs) do
     user
-    |> cast(attrs, [:email, :handle, :first_name, :last_name, :password])
+    |> cast(attrs, [:email, :handle, :first_name, :last_name, :password, :icon])
+    |> cast_attachments(attrs,[:icon])
     |> validate_required([:email, :handle, :first_name, :last_name, :password])
     #From Nat's Lecture Notes
     |> validate_password(:password)
     |> put_pass_hash()
     |> validate_required([:email, :handle, :first_name, :last_name, :password_hash])
+  end
+  def changeset_updateOnly(%User{} = user, attrs) do
+    user
+    |> cast(attrs, [:email, :handle, :first_name, :last_name, :password, :icon])
+    |> cast_attachments(attrs,[:icon])
+    |> validate_required([:email, :handle, :first_name, :last_name])
   end
   # Password validation
   # From Comeonin docs (From Nat's Class Notes)

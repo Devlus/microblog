@@ -125,6 +125,9 @@
         $("#login-submit").click(function(){
             $("#login-form").submit();
         });
+        $("#icon_file").change(function(){
+            $("#icon_form").submit();
+        });
     });
     
     </script>

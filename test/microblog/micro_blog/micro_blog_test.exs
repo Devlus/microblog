@@ -238,4 +238,62 @@ defmodule Microblog.MicroBlogTest do
       assert %Ecto.Changeset{} = MicroBlog.change_like(like)
     end
   end
+
+  describe "icon" do
+    alias Microblog.MicroBlog.Icon
+
+    @valid_attrs %{}
+    @update_attrs %{}
+    @invalid_attrs %{}
+
+    def icon_fixture(attrs \\ %{}) do
+      {:ok, icon} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> MicroBlog.create_icon()
+
+      icon
+    end
+
+    test "list_icon/0 returns all icon" do
+      icon = icon_fixture()
+      assert MicroBlog.list_icon() == [icon]
+    end
+
+    test "get_icon!/1 returns the icon with given id" do
+      icon = icon_fixture()
+      assert MicroBlog.get_icon!(icon.id) == icon
+    end
+
+    test "create_icon/1 with valid data creates a icon" do
+      assert {:ok, %Icon{} = icon} = MicroBlog.create_icon(@valid_attrs)
+    end
+
+    test "create_icon/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = MicroBlog.create_icon(@invalid_attrs)
+    end
+
+    test "update_icon/2 with valid data updates the icon" do
+      icon = icon_fixture()
+      assert {:ok, icon} = MicroBlog.update_icon(icon, @update_attrs)
+      assert %Icon{} = icon
+    end
+
+    test "update_icon/2 with invalid data returns error changeset" do
+      icon = icon_fixture()
+      assert {:error, %Ecto.Changeset{}} = MicroBlog.update_icon(icon, @invalid_attrs)
+      assert icon == MicroBlog.get_icon!(icon.id)
+    end
+
+    test "delete_icon/1 deletes the icon" do
+      icon = icon_fixture()
+      assert {:ok, %Icon{}} = MicroBlog.delete_icon(icon)
+      assert_raise Ecto.NoResultsError, fn -> MicroBlog.get_icon!(icon.id) end
+    end
+
+    test "change_icon/1 returns a icon changeset" do
+      icon = icon_fixture()
+      assert %Ecto.Changeset{} = MicroBlog.change_icon(icon)
+    end
+  end
 end
